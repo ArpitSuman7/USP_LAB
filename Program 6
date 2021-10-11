@@ -1,92 +1,62 @@
 #include <stdio.h>
-# define MAX 100
-char stack[MAX];
-int top=-1;
-void push(char ch)
-{
-    if (top==MAX-1)
-        printf("Stack is full\n");
-    else  
-    {
-        top++;
-        stack[top]=ch;
-    }  
-}
-char pop()
-{
-    char item;
-    if (top==-1)
-        printf("\n stack is empty");
-    else
-    {
-        item=stack[top];
-        top--;
-        return item;
+#include <stdlib.h>
+#include <string.h>
+#include <limits.h>
+struct Employee {
+    int emp_id;
+    char name[20];
+    int sal;
+};
+int main () {
+    FILE *of;
+    of= fopen ("demo.txt", "w");
+    if (of == NULL) {
+        fprintf(stderr, "\nError to open the file\n");
+        exit (1);
     }
-}
-int stackempty()
-{
-    if(top==-1) return 1;
-    else return 0;
-}
-char stacktop()
-{
-    if( top==-1)
-        printf("\n stack is empty!");
-    else
-        return stack[top];
-}
-int priority(char ch)
-{
-    switch(ch)
-    {
-        case '+':
-        case '-':return (1);
-        case '*':
-        case '/':return (2);
-        default : return (0);
-    }
-}
-int main(int argc, char **argv)
-{
-char infix[100];
-    int i, item;
-    printf("Enter the infix expression :");
-    scanf("%s",infix);
-    printf("Expression : %s",infix);
-    printf("\n Postfix: ");
-    i=0;
-     while (infix[i]!='\0')
-    {
-        switch (infix[i])
-        {
-            case '(': push(infix[i]);
-                      break;
-            case ')':while(( item=pop())!='(')
-                        printf("%c",item);
-                      break;
-            case '+':
-            case '-':
-            case '*':
-            case '/':
-                      while(!stackempty() && priority(infix[i])<=priority(stacktop()))
-                      {
-                            item=pop();                   
-                            printf("%c", item);
-                      }
-                      push(infix[i]);
-                      break;
-            default : printf("%c", infix[i]);
-                      break;
+    int n, i;
+        printf("Enter the number of employees : ");
+        scanf("%d", &n);
+        struct Employee employess[n]; 
+        for(i = 0;i<n;i++) {
+            printf("\nEnter the name of employee %d : ", (i+1));
+            scanf("%s", &employess[i].name);
+            printf("Enter the id of employee %d : ", (i+1));
+            scanf("%d", &employess[i].emp_id);
+            printf("Enter the salary of employee %d : ", (i+1));
+            scanf("%d", &employess[i].sal);
+            fwrite(&employess[i], sizeof(struct Employee), 1, of);
         }
-         i++;
+
+    if(fwrite != 0)
+        printf("Contents to file written successfully !\n");
+    else
+        printf("Error writing file !\n");
+    fclose (of);
+    FILE *inf;
+    struct Employee inp;
+    inf = fopen ("demo.txt", "r");
+    if (inf == NULL) {
+        fprintf(stderr, "\nError to open the file\n");
+        exit (1);
     }
-    while(!stackempty())
-    {
-        char item;
-        item=pop();
-        printf("%c", item);
+    int max = INT_MIN;
+    while(fread(&inp, sizeof(struct Employee), 1, inf))
+        if(inp.sal>=max)
+            max = inp.sal;
+    fclose (inf);
+    inf = NULL;
+    
+    inf = fopen ("demo.txt", "r");
+    if (inf == NULL) {
+        fprintf(stderr, "\nError to open the file\n");
+        exit (1);
     }
-    printf("\n");                    
-    return 0;
+    printf("\n\nEmployee with greatest salary; \n");
+    while(fread(&inp, sizeof(struct Employee), 1, inf))
+        if(inp.sal==max)
+            printf ("emp_id = %d name = %s salary = %d", inp.emp_id, inp.name, inp.sal);
+    printf("\n\n");
+    fclose (inf);
 }
+
