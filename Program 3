@@ -1,92 +1,42 @@
 #include <stdio.h>
-# define MAX 100
-char stack[MAX];
-int top=-1;
-void push(char ch)
-{
-    if (top==MAX-1)
-        printf("Stack is full\n");
-    else  
-    {
-        top++;
-        stack[top]=ch;
-    }  
-}
-char pop()
-{
-    char item;
-    if (top==-1)
-        printf("\n stack is empty");
-    else
-    {
-        item=stack[top];
-        top--;
-        return item;
+void bill(int*, int*, int, int*);
+
+void bill(int* quantities, int* priceList, int n, int* result) {
+    for(int i = 0; i < n; i++)
+        result[0] += (priceList[i] >=0 && quantities[i]>=0)?(priceList[i]*quantities[i]):0;
+    if(result[0]>=10000) {
+        result[1] = result[0]*0.05;
+        result[0] *= 0.95;
     }
-}
-int stackempty()
-{
-    if(top==-1) return 1;
-    else return 0;
-}
-char stacktop()
-{
-    if( top==-1)
-        printf("\n stack is empty!");
-    else
-        return stack[top];
-}
-int priority(char ch)
-{
-    switch(ch)
-    {
-        case '+':
-        case '-':return (1);
-        case '*':
-        case '/':return (2);
-        default : return (0);
+    else if(result[0]>=7500){
+        result[1]  = result[0]*0.03;
+        result[0]*=0.97;
     }
+    else if(result[0]>=5000) {
+        result[1] = result[0]*0.02;
+        result[0]*=0.98;
+    }
+    
 }
-int main(int argc, char **argv)
-{
-char infix[100];
-    int i, item;
-    printf("Enter the infix expression :");
-    scanf("%s",infix);
-    printf("Expression : %s",infix);
-    printf("\n Postfix: ");
-    i=0;
-     while (infix[i]!='\0')
-    {
-        switch (infix[i])
-        {
-            case '(': push(infix[i]);
-                      break;
-            case ')':while(( item=pop())!='(')
-                        printf("%c",item);
-                      break;
-            case '+':
-            case '-':
-            case '*':
-            case '/':
-                      while(!stackempty() && priority(infix[i])<=priority(stacktop()))
-                      {
-                            item=pop();                   
-                            printf("%c", item);
-                      }
-                      push(infix[i]);
-                      break;
-            default : printf("%c", infix[i]);
-                      break;
-        }
-         i++;
+
+void main() {
+    int n;
+    int result[] = {0, 0};
+    printf("Enter the number of items : ");
+    scanf("%d", &n);
+    int quantities[n];
+    int priceList[n];
+    printf("-----ENTER PRICE LIST-----\n");
+    for(int i = 0;i<n;i++) {
+        printf("Enter price of item %d : ", (i+1));
+        scanf("%d", priceList+i);
     }
-    while(!stackempty())
-    {
-        char item;
-        item=pop();
-        printf("%c", item);
+    printf("\n-----ENTER QUANTITY LIST-----\n");
+    for(int i = 0;i<n;i++) {
+        printf("Enter quantity of item %d : ", (i+1));
+        scanf("%d", quantities+i);
     }
-    printf("\n");                    
-    return 0;
+    bill(quantities, priceList, n, result);
+    printf("\n\nBill before discount = %d\n\n", (result[0]+result[1]));
+    printf("Bill after discount = %d\n\n", result[0]);
 }
