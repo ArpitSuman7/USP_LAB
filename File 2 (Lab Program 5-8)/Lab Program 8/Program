@@ -23,11 +23,11 @@ echo "Enter two numbers "
 read a b
 result=`expr "$a*$b" | bc`
 echo "Result: $result"
-elif [ $ch -eq 4 ]
+elif [ $choice -eq 4 ] 
 then
 echo "Enter two numbers "
 read a b
-result=`expr "$a/$b" | bc -l`
+result=`expr "$a/$b" | bc`
 echo "Result: $result"
 else
 echo "Wrong choice"
