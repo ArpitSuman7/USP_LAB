@@ -1,0 +1,14 @@
+#!/bin/bash
+echo "Enter the number= "
+read no
+echo "Enter the power= "
+read power
+result=1
+count=0
+while [ $power -ge 1 ] 
+do
+result=`expr $result \* $no`
+power=`expr $power - 1`
+counr=`expr $count + 1`
+done
+echo "Result= $result"
