@@ -1,0 +1,10 @@
+#!/bin/sh
+echo "Enter the number of lines, characters and words in a file: "
+echo "Enter the filename: "
+read fname
+lines=`wc -l < $fname`
+characters=`wc -c < $fname`
+words=`wc -w < $fname`
+echo "Lines= $lines"
+echo "Characters= $characters"
+echo "Words= $words"
